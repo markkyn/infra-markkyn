@@ -1,0 +1,20 @@
+name: infra-markkyn
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+     - GF_SERVER_ROOT_URL=http://my.markkyn.com/
+     - GF_PLUGINS_PREINSTALL=grafana-clock-panel
+    ports:
+     - '3000:3000'
+    volumes:
+     - 'grafana_storage:/var/lib/grafana'
+
+include:
+  # Password management
+  - docker/services/passbolt/docker-compose-ce.yaml
+
+volumes:
+  grafana_storage: {}
