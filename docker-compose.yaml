@@ -14,8 +14,11 @@ services:
 
 include:
   # Password management
-  - docker/services/passbolt/docker-compose-ce.yaml
+  - docker/services/passbolt/docker-compose-ce.yaml # PassBolt
   # Gaming
-  - docker/services/gaming/docker-compose.yaml
+  - docker/services/gaming/docker-compose.yaml # Minecraft
+  # Automation
+  - docker/services/automation/docker-compose.yaml # n8n
+
 volumes:
   grafana_storage: {}
