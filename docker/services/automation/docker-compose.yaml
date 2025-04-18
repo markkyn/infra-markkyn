@@ -18,7 +18,7 @@ services:
       - "8080:80"
       - "4343:443"
     volumes:
-      - traefik_data:/letsencrypt
+      - ./traefik_data/:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   n8n:
