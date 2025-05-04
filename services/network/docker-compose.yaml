@@ -5,8 +5,8 @@ networks:
     driver: bridge
 
 services:
-  mysql:
-    container_name: mysql
+  zabbix-mysql:
+    container_name: zabbix-mysql
     image: mysql:5.7
     networks:
       - network-zabbix
@@ -26,8 +26,8 @@ services:
     networks:
       - network-zabbix
     links:
-      - mysql
-    restart: always
+      - zabbix-mysql
+    restart: unless-stopped
     ports:
       - '10051:10051'
     volumes:
@@ -38,7 +38,7 @@ services:
       - MYSQL_USER=zabbix
       - MYSQL_PASSWORD=carryontech
     depends_on:
-      - mysql
+      - zabbix-mysql
 
   zabbix-frontend:
     container_name: zabbix-frontend
@@ -46,7 +46,7 @@ services:
     networks:
       - network-zabbix
     links:
-      - mysql
+      - zabbix-mysql
     restart: always
     ports:
       - '80:8080'
@@ -58,24 +58,8 @@ services:
       - MYSQL_PASSWORD=carryontech
       - PHP_TZ=America/Sao_Paulo
     depends_on:
-      - mysql
+      - zabbix-mysql
    
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    networks:
-      - network-zabbix
-    links:
-      - mysql
-      - zabbix-server
-    restart: always
-    ports:
-      - '3000:3000'
-    environment: 
-      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
-    depends_on:
-      - mysql
-      - zabbix-server
   zabbix-agent:
     container_name: zabbix-agent
     image: zabbix/zabbix-agent2:alpine-5.0.1

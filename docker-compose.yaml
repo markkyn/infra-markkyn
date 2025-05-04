@@ -6,19 +6,30 @@ services:
     restart: unless-stopped
     environment:
      - GF_SERVER_ROOT_URL=http://my.markkyn.com/
+     - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
      - GF_PLUGINS_PREINSTALL=grafana-clock-panel
     ports:
      - '3000:3000'
     volumes:
      - 'grafana_storage:/var/lib/grafana'
+    networks:
+      - network-zabbix
+    links:
+      - zabbix-mysql
+      - zabbix-server
+    depends_on:
+      - zabbix-mysql
+      - zabbix-server
 
 include:
   # Password management
-  - docker/services/passbolt/docker-compose-ce.yaml # PassBolt
+  - services/passbolt/docker-compose-ce.yaml # PassBolt
   # Gaming
-  - docker/services/gaming/docker-compose.yaml # Minecraft
+  - services/gaming/docker-compose.yaml # Minecraft
   # Automation
-  - docker/services/automation/docker-compose.yaml # n8n
+  - services/automation/docker-compose.yaml # n8n
+  # Network
+  - services/network/docker-compose.yaml # Zabbix
 
 volumes:
   grafana_storage: {}
