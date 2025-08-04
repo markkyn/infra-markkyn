@@ -21,9 +21,19 @@ services:
       - zabbix-mysql
       - zabbix-server
 
+  portainer:
+    image: ngxson/portainer-ce-without-annoying:latest 
+    container_name: portainer
+    ports:
+      - '18000:8000'
+      - '19000:19000'
+    volumes:
+      - ./portainer/data:/data:Z
+      - /var/run/docker.sock:/var/run/docker.sock
+
 include:
   # Password management
-  - services/passbolt/docker-compose-ce.yaml # PassBolt
+  # - services/passbolt/docker-compose-ce.yaml # PassBolt
   # Gaming
   - services/gaming/docker-compose.yaml # Minecraft
   # Automation
